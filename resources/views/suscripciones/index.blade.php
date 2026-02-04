@@ -2,46 +2,44 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Listado de Suscripciones</title>
+    <title>Suscripciones Gimnasio</title>
     <style>
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        th { background-color: #f4f4f4; }
-        .alert { padding: 15px; background-color: #ffcccc; color: #a00; border: 1px solid #ebccd1; border-radius: 4px; }
+        body { font-family: sans-serif; background-color: #f9f9f9; padding: 20px; }
+        .container { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
+        .card { background: white; border-radius: 8px; padding: 15px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .card-title { font-size: 1.2rem; color: #333; margin-bottom: 10px; border-bottom: 2px solid #e2e8f0; padding-bottom: 5px; }
+        .info { margin-bottom: 8px; font-size: 0.9rem; }
+        .label { font-weight: bold; color: #666; }
+        .no-data { grid-column: 1 / -1; background-color: #fff5f5; color: #c53030; padding: 20px; border: 1px solid #feb2b2; border-radius: 8px; text-align: center; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <h1>Gestión de Suscripciones - Gimnasio</h1>
+    <h1>Gestión de Suscripciones</h1>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Plan</th>
-                <th>Costo Mensual</th>
-                <th>Máximo de Días</th>
-                <th>Vencimiento</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($suscripciones as $s)
-                <tr>
-                    <td><strong>{{ $s->plan }}</strong></td>
-                    <td>${{ number_format($s->costo_mensual, 2) }}</td>
-                    <td>{{ $s->maximo_dias }} días</td>
-                    <td>{{ \Carbon\Carbon::parse($s->vencimiento)->format('d/m/Y') }}</td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="4">
-                        <div class="alert">
-                            No se encontraron registros en el sistema.
-                        </div>
-                    </td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
+    <div class="container">
+        @forelse($suscripciones as $s)
+            <div class="card">
+                <div class="card-title">{{ $s->plan }}</div>
+                
+                <div class="info">
+                    <span class="label">Costo:</span> ${{ number_format($s->costo_mensual, 2) }}
+                </div>
+                
+                <div class="info">
+                    <span class="label">Días Máximos:</span> {{ $s->maximo_dias }} días
+                </div>
+                
+                <div class="info">
+                    <span class="label">Vencimiento:</span> {{ \Carbon\Carbon::parse($s->vencimiento)->format('d/m/Y') }}
+                </div>
+            </div>
+        @empty
+            <div class="no-data">
+                No se encontraron registros en el sistema.
+            </div>
+        @endforelse
+    </div>
 
 </body>
 </html>
